@@ -94,6 +94,15 @@ func (f *Forest) Test(X [][]float64) error {
 	sorted := sortMap(f.AnomalyScores)
 	anomFloor := int(math.Floor(f.AnomalyRatio * float64(len(X))))
 	anomCeil := int(math.Ceil(f.AnomalyRatio * float64(len(X))))
+
+	if len(sorted) < (anomFloor + 1) {
+		return errors.New("anomaly floor is out of range")
+	}
+
+	if len(sorted) < (anomCeil + 1) {
+		return errors.New("anomaly ceil is out of range")
+	}
+
 	f.AnomalyBound = (sorted[anomFloor].Value + sorted[anomCeil].Value) / 2
 
 	f.Labels = make([]int, len(X))
